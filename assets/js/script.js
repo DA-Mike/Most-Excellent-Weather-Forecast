@@ -27,7 +27,6 @@ var formSubmitHandler = function (event) {
 
         if (cityName) {
             getLatLong(cityName, stateName);
-            // pushToStore(cityGlob);
 
             cityInputEl.value = '';
         } else {
@@ -198,12 +197,12 @@ function pushToStore(search) {
             }
         }
 
-        if (localCheck.length > 10) {
+        if (localCheck.length > 9) {
             localCheck.pop();
         }
         
         if(counter === 0 && localCheck.length > 0) {
-        localCheck.push(search);
+        localCheck.unshift(search);
         localStorage.setItem("search-history", JSON.stringify(localCheck));
         }
     }
@@ -228,12 +227,12 @@ function displayHistory() {
     if (localCheck === null) {
     } else {
         for (i = 0; i < localCheck.length; i++) {
-        var newBtn = document.createElement('btn');
+            var newBtn = document.createElement('btn');
 
-        newBtn.textContent = localCheck[i];
-        $(newBtn).addClass('btn btn-city');
-        $(newBtn).attr('city-attribute', localCheck[i]);
-        cityBtns.append(newBtn);
+            newBtn.textContent = localCheck[i];
+            $(newBtn).addClass('btn btn-city');
+            $(newBtn).attr('city-attribute', localCheck[i]);
+            cityBtns.append(newBtn);
         }
     }
 }
