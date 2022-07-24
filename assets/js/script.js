@@ -107,7 +107,7 @@ function displaySummary(data) {
     $(weatherIcon).attr("src", "https://openweathermap.org/img/wn/" + data.current.weather[0].icon + ".png");
 
     sumDate.textContent = moment(data.current.dt, "X").format("MMM/DD/YYYY");
-    cityTitle.textContent = cityGlob + " " + "(" + sumDate.textContent + ")"; //+ " " + data.current.weather[0].icon;
+    cityTitle.textContent = cityGlob + " " + "(" + sumDate.textContent + ")";
     cityTitle.append(weatherIcon);
     cityTemp.textContent = "Temp: " + Math.floor(data.current.temp) + " °F";
     cityWind.textContent = "Wind Speed: " + Math.floor(data.current.wind_speed) + " MPH";
