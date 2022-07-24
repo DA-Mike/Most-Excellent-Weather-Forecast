@@ -25,7 +25,6 @@ var formSubmitHandler = function (event) {
         var stateName = cityInputEl.value.split(',')[1].trim();
 
         if (cityName) {
-            console.log("getLatLong called by fSH");
             getLatLong(cityName, stateName);
             pushToStore(cityGlob);
 
@@ -45,10 +44,8 @@ var formSubmitHandler = function (event) {
 function buttonClickHandler(event) {
     var city = event.target.getAttribute('city-attribute');
     cityGlob = city;
-    console.log("city: ", city);
     try {
         var cityName = city.split(',')[0].trim();
-        console.log("cityName: ", cityName);
         var stateName = city.split(',')[1].trim();
 
         if (city) {
@@ -65,13 +62,10 @@ function buttonClickHandler(event) {
 var getLatLong = function (city, state) {
     var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + ',' + state + ',US&limit=1&appid=' + apiKey;
 
-    // pushToStore(city);
-
     fetch(apiUrl)
     .then(function (response) {
       if (response.ok) {
         response.json().then(function (data) {
-            console.log("getWeatherData called by getLatLong");
             var lat = data[0].lat;
             var lon = data[0].lon;            
             
@@ -94,7 +88,6 @@ var getWeatherData = function(lat, lon) {
     .then(function (response) {
       if (response.ok) {
         response.json().then(function (data) {
-            console.log("display functions called by getWeatherData");
             displaySummary(data);
             displayForecast(data);
         });
@@ -110,12 +103,6 @@ var getWeatherData = function(lat, lon) {
 
 //populate summary data
 function displaySummary(data) {
-    console.log('displaySummary: ' , cityGlob, 
-    "temp: ", data.current.temp,
-    " wind: ", data.current.wind_speed,
-    " humidity: ", data.current.humidity,
-    " UV Index: ", data.current.uvi);
-
     var weatherIcon = document.createElement("img");
     $(weatherIcon).attr("src", "http://openweathermap.org/img/wn/" + data.current.weather[0].icon + ".png");
 
@@ -129,6 +116,7 @@ function displaySummary(data) {
     cityUviTitle.textContent = "UV Index: ";
     cityUviTitle.append(cityUvi);
 
+    // UV index styler
     if(data.current.uvi < 3) {
         $(cityUvi).css('background-color', 'green');
     } else if (data.current.uvi > 2 && data.current.uvi < 6) {
@@ -141,9 +129,7 @@ function displaySummary(data) {
 }
 
 //populate forecast data
-function displayForecast(data) {
-    console.log("displayForecast: " , cityGlob, data);
-    
+function displayForecast(data) {    
     $(forecastEl).children().remove();
 
     for (i = 1; i < 6; i++) {
@@ -177,32 +163,25 @@ function displayForecast(data) {
 
 //stores searches
 function pushToStore(search) {
-    console.log(search);
     var localCheck = JSON.parse(localStorage.getItem("search-history"));
-    console.log("localcheck1: ", localCheck);
     var counter = 0;
 
     if (localCheck === null) {
-        console.log("localcheck null");
         localCheck = [];
         localCheck.push(search);
         localStorage.setItem("search-history", JSON.stringify(localCheck));
     } else {
-        console.log("localcheck !null");
         for (i = 0; i < localCheck.length; i++) {
             if (localCheck[i] === search) {
             counter++;
-            console.log("counter: ", counter);
             }
         }
-        console.log("counter final: ", counter);
 
         if (localCheck.length > 10) {
             localCheck.pop();
         }
         
         if(counter === 0 && localCheck.length > 0) {
-        console.log("city not present");
         localCheck.push(search);
         localStorage.setItem("search-history", JSON.stringify(localCheck));
         }
@@ -238,7 +217,7 @@ function displayHistory() {
     }
 }
 
-//initialize page (pulls historical searches)
+//initialize page (pulls historical searches and defaults to San Francisco)
 function init() {
     displayHistory();
     getLatLong("San Francisco", "CA");

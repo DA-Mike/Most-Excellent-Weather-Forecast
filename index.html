@@ -34,7 +34,6 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
-                <!-- <button type="button" class="btn btn-primary">Save</button> -->
             </div>
         </div>
     </div>
@@ -42,7 +41,7 @@
 
   <main class="flex-row justify-space-between">
     <div class="col-12 col-md-3">
-
+      <!-- Search box -->
       <div class="card">
         <h3 class="card-header text-uppercase">Search for a City:</h3>
         <form id="city-form" class="card-body">
@@ -50,15 +49,17 @@
           <button type="submit" class="btn btn-search">Search</button>
         </form>
       </div>
-
+      <!-- Search history -->
       <div class="card">
         <div id="city-buttons" class="card-body">
           
         </div>
       </div>
     </div>
+    <!-- Weather -->
     <div class="weather-container col-12 col-md-9">
-        <div class="card card-summary">
+        <!--Today's summary  -->
+      <div class="card card-summary">
             <div class="col-12 col-md-8">
             <h2 class="subtitle subtitle-summary">San Francisco, CA<span id="date"></span></h2>
             <div id="summary-container" class="summary-container">
@@ -69,6 +70,7 @@
             </div>
             </div>
         </div> 
+        <!-- 5 day forecast -->
         <div class="container">
             <h2 class="forecast">5 Day Forecast:</h2>
             <div class="container">
