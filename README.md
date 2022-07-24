@@ -8,7 +8,7 @@ Please note that it appears the UV Index data coming in from the API provider do
 
 This project was an excellent introduction to utilizing server-side APIs. My motivation for this project was becoming more familiar with utilizing server-side APIs, parsing response data from API calls, and turning that data into useful information that's very intuitive for the app user.
 
-I utilized JavaScript, jQuery, bootstrap, moment.js, and others to successfully complete this project. Full disclosure, I did cannibalize some html/css framework from a previous lesson since the layout was so similar (you'll see comments pointing out what's not mine), but in the end I feel like I made it my own.
+I utilized JavaScript, jQuery, bootstrap, moment.js, and others to successfully complete this project. Full disclosure, I did cannibalize some html/css framework from a previous lesson since the layout was so similar (you'll see comments pointing out what's not mine), but in the end I feel like I made it my own. I also changed the background color from the original mockup as having the box slightly covered helps with contrast.
 
 ## Live Site
 
