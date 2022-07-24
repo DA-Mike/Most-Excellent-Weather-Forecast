@@ -21,7 +21,24 @@
   <header class="hero">
     <h1 class="app-title">Weather Dashboard</h1>
   </header>
-
+  <!-- Modal HTML -->
+  <div id="myModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Search Error</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Please use correct format (city, state initials)</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                <!-- <button type="button" class="btn btn-primary">Save</button> -->
+            </div>
+        </div>
+    </div>
+  </div>
 
   <main class="flex-row justify-space-between">
     <div class="col-12 col-md-3">
@@ -30,32 +47,30 @@
         <h3 class="card-header text-uppercase">Search for a City:</h3>
         <form id="city-form" class="card-body">
           <input name="city" id="city" type="text" autofocus="true" class="form-input" placeholder="San Francisco, CA" />
-          <button type="submit" class="btn">Search</button>
+          <button type="submit" class="btn btn-search">Search</button>
         </form>
       </div>
 
       <div class="card">
-        <h3 class="card-header text-uppercase">Previous Searches</h3>
         <div id="city-buttons" class="card-body">
-          <!-- <button data-language="javascript" class="btn">JavaScript</button>
-          <button data-language="html" class="btn">HTML</button>
-          <button data-language="css" class="btn">CSS</button> -->
+          
         </div>
       </div>
     </div>
     <div class="weather-container col-12 col-md-9">
-        <div class="card">
+        <div class="card card-summary">
             <div class="col-12 col-md-8">
-            <h2 class="subtitle">San Francisco, CA<span id="date"></span></h2>
-            <div id="summary-container" class="summary-container"></div>
+            <h2 class="subtitle subtitle-summary">San Francisco, CA<span id="date"></span></h2>
+            <div id="summary-container" class="summary-container">
                 <div class="temp"></div>
                 <div class="wind"></div>
                 <div class="humidity"></div>
                 <div class="uvi"><span id="uvi"></span></div>
             </div>
+            </div>
         </div> 
         <div class="container">
-            <h2 class="forecast">5 Day Forecast</h2>
+            <h2 class="forecast">5 Day Forecast:</h2>
             <div class="container">
                 <div class="forecast-container row">
                     <div class="w-100"></div>

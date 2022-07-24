@@ -19,18 +19,24 @@ var priorSearches = [];
 var formSubmitHandler = function (event) {
     event.preventDefault();
     cityGlob = cityInputEl.value;
-    pushToStore(cityGlob);
-    var cityName = cityInputEl.value.split(',')[0].trim();
-    var stateName = cityInputEl.value.split(',')[1].trim();
+    
+    try {
+        var cityName = cityInputEl.value.split(',')[0].trim();
+        var stateName = cityInputEl.value.split(',')[1].trim();
 
-    if (cityName) {
-        console.log("getLatLong called by fSH");
-        getLatLong(cityName, stateName);
+        if (cityName) {
+            console.log("getLatLong called by fSH");
+            getLatLong(cityName, stateName);
+            pushToStore(cityGlob);
 
-        // cityTitle.textContent = '';
-        cityInputEl.value = '';
-    } else {
-        alert('Please enter a city name');
+            cityInputEl.value = '';
+        } else {
+            alert('Please enter a city name');
+        }
+    } catch(err) {
+        return $(document).ready(function(){
+                $("#myModal").modal('show');
+        });
     }
 };
 
@@ -40,15 +46,19 @@ function buttonClickHandler(event) {
     var city = event.target.getAttribute('city-attribute');
     cityGlob = city;
     console.log("city: ", city);
+    try {
+        var cityName = city.split(',')[0].trim();
+        console.log("cityName: ", cityName);
+        var stateName = city.split(',')[1].trim();
 
-    var cityName = city.split(',')[0].trim();
-    console.log("cityName: ", cityName);
-    var stateName = city.split(',')[1].trim();
-
-    if (city) {
-        getLatLong(cityName, stateName);
+        if (city) {
+            getLatLong(cityName, stateName);
+        }
+    } catch(err) {
+        return $(document).ready(function(){
+            $("#myModal").modal('show');
+        });
     }
-
 }
 
 //get lat long
@@ -106,10 +116,14 @@ function displaySummary(data) {
     " humidity: ", data.current.humidity,
     " UV Index: ", data.current.uvi);
 
+    var weatherIcon = document.createElement("img");
+    $(weatherIcon).attr("src", "http://openweathermap.org/img/wn/" + data.current.weather[0].icon + ".png");
+
     sumDate.textContent = moment(data.current.dt, "X").format("MMM/DD/YYYY");
-    cityTitle.textContent = cityGlob + " " + "(" + sumDate.textContent + ")";
-    cityTemp.textContent = "Temp: " + data.current.temp + "F";
-    cityWind.textContent = "Wind Speed: " + data.current.wind_speed + "MPH";
+    cityTitle.textContent = cityGlob + " " + "(" + sumDate.textContent + ")"; //+ " " + data.current.weather[0].icon;
+    cityTitle.append(weatherIcon);
+    cityTemp.textContent = "Temp: " + Math.floor(data.current.temp) + " °F";
+    cityWind.textContent = "Wind Speed: " + Math.floor(data.current.wind_speed) + " MPH";
     cityHum.textContent = "Humidity: " + data.current.humidity + "%";
     cityUvi.textContent = data.current.uvi;
     cityUviTitle.textContent = "UV Index: ";
@@ -138,18 +152,25 @@ function displayForecast(data) {
         var dayTemp = document.createElement("div");
         var dayWind = document.createElement("div");
         var dayHum = document.createElement("div");
+        var weatherIcon = document.createElement("img");
+        $(weatherIcon).attr("src", "http://openweathermap.org/img/wn/" + data.daily[i].weather[0].icon + ".png");
+        $(weatherIcon).css({
+            width: "50px",
+            height: "50px",
+        });
 
         var todayDT = moment(data.daily[i].dt, "X").format("MMM/DD/YYYY");
 
         dayDate.textContent = todayDT;
         dayBox.append(dayDate);
-        dayTemp.textContent = "Temp: " + data.daily[i].temp.max + "/" + data.daily[i].temp.min + "F";
+        dayBox.append(weatherIcon);
+        dayTemp.textContent = "Temp: " + Math.floor(data.daily[i].temp.max) + "/" + Math.floor(data.daily[i].temp.min) + " °F";
         dayBox.append(dayTemp);
-        dayWind.textContent = "Wind: " + data.daily[i].wind_speed + "MPH";
+        dayWind.textContent = "Wind: " + Math.floor(data.daily[i].wind_speed) + " MPH";
         dayBox.append(dayWind);
         dayHum.textContent = "Humidity: " + data.daily[i].humidity + "%";
         dayBox.append(dayHum);
-        $(dayBox).addClass("col card");
+        $(dayBox).addClass("col card card-forecast");
         forecastEl.append(dayBox);
     }
 }
@@ -175,6 +196,10 @@ function pushToStore(search) {
             }
         }
         console.log("counter final: ", counter);
+
+        if (localCheck.length > 10) {
+            localCheck.pop();
+        }
         
         if(counter === 0 && localCheck.length > 0) {
         console.log("city not present");
@@ -182,11 +207,10 @@ function pushToStore(search) {
         localStorage.setItem("search-history", JSON.stringify(localCheck));
         }
     }
-        
-    // displayHistory();
     helper();
 }
 
+//helps avoid problems with calling displayHistory()
 function helper() {
     var localCheck = JSON.parse(localStorage.getItem("search-history"));
 
@@ -207,7 +231,7 @@ function displayHistory() {
         var newBtn = document.createElement('btn');
 
         newBtn.textContent = localCheck[i];
-        $(newBtn).addClass('btn');
+        $(newBtn).addClass('btn btn-city');
         $(newBtn).attr('city-attribute', localCheck[i]);
         cityBtns.append(newBtn);
         }
@@ -222,6 +246,8 @@ function init() {
 }
 
 //event listeners
-init();
 cityFormEl.addEventListener('submit', formSubmitHandler);
 cityBtns.addEventListener('click', buttonClickHandler);
+
+//initialize page
+init();
