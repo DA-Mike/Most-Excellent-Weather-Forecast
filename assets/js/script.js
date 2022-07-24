@@ -14,6 +14,7 @@ var apiKey = 'b011db637bad336f73754395f19fc139';
 var cityGlob = '';
 var cityObj = {name: '', lat: '', lon: ''};
 var priorSearches = [];
+var pageCounter = 0;
 
 //formSubmitHandler
 var formSubmitHandler = function (event) {
@@ -26,7 +27,7 @@ var formSubmitHandler = function (event) {
 
         if (cityName) {
             getLatLong(cityName, stateName);
-            pushToStore(cityGlob);
+            // pushToStore(cityGlob);
 
             cityInputEl.value = '';
         } else {
@@ -61,43 +62,62 @@ function buttonClickHandler(event) {
 //get lat long
 var getLatLong = function (city, state) {
     var apiUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + city + ',' + state + ',US&limit=1&appid=' + apiKey;
+    pageCounter++;
 
     fetch(apiUrl)
     .then(function (response) {
-      if (response.ok) {
+    if (response.ok) {
         response.json().then(function (data) {
-            var lat = data[0].lat;
-            var lon = data[0].lon;            
-            
+            try {
+                var lat = data[0].lat;
+                var lon = data[0].lon;
+            } catch(err) {
+                return $(document).ready(function(){
+                    $(".modal-body").children()[0].textContent = "Invalid city";
+                    $("#myModal").modal('show');
+                });
+            }   
             getWeatherData(lat, lon);
+            if (pageCounter > 1) {
+                pushToStore(cityGlob);
+            }
         });
-      } else {
+    } else {
         alert('Error: ' + response.statusText);
-      }
+    }
     })
     .catch(function (error) {
-      alert('Unable to connect to OpenWeather');
+    alert('Unable to connect to OpenWeather');
     });
-}
+} 
+    
+
 
 //getWeatherData
 var getWeatherData = function(lat, lon) {
     var apiURL = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + lon + '&units=imperial&exclude=minutely,hourly,warnings&appid=' + apiKey;
 
-    fetch(apiURL)
-    .then(function (response) {
-      if (response.ok) {
-        response.json().then(function (data) {
-            displaySummary(data);
-            displayForecast(data);
+    try {
+        fetch(apiURL)
+        .then(function (response) {
+        if (response.ok) {
+            response.json().then(function (data) {
+                displaySummary(data);
+                displayForecast(data);
+            });
+        } else {
+            alert('Error: ' + response.statusText);
+        }
+        })
+        .catch(function (error) {
+        alert('Unable to connect to OpenWeather');
         });
-      } else {
-        alert('Error: ' + response.statusText);
-      }
-    })
-    .catch(function (error) {
-      alert('Unable to connect to OpenWeather');
-    });
+    } catch(err) {
+        return $(document).ready(function(){
+            $(".modal-body").textContent = "Invalid city";
+            $("#myModal").modal('show');
+        });
+    }
 };
 
 
