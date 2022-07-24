@@ -7,6 +7,8 @@ var cityWind = document.querySelector('.wind');
 var cityHum = document.querySelector('.humidity');
 var cityUviTitle = document.querySelector('.uvi');
 var cityUvi = document.querySelector("#uvi");
+var forecastEl = document.querySelector(".forecast-container");
+var cityBtns = document.querySelector("#city-buttons");
 var apiKey = 'b011db637bad336f73754395f19fc139';
 var cityGlob = '';
 var cityObj = {name: '', lat: '', lon: ''};
@@ -37,6 +39,8 @@ var formSubmitHandler = function (event) {
 var getLatLong = function (city, state) {
     var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + ',' + state + ',US&limit=1&appid=' + apiKey;
 
+    pushToStore(city);
+
     fetch(apiUrl)
     .then(function (response) {
       if (response.ok) {
@@ -66,7 +70,7 @@ var getWeatherData = function(lat, lon) {
         response.json().then(function (data) {
             console.log("display functions called by getWeatherData");
             displaySummary(data);
-            // displayForecast(data);
+            displayForecast(data);
         });
       } else {
         alert('Error: ' + response.statusText);
@@ -109,13 +113,73 @@ function displaySummary(data) {
 function displayForecast(data) {
     console.log("displayForecast: " , cityGlob, data);
     for (i = 0; i < 6; i++) {
+        var dayBox = document.createElement("div");
+        var dayDate = document.createElement("h5");
+        var dayTemp = document.createElement("div");
+        var dayWind = document.createElement("div");
+        var dayHum = document.createElement("div");
 
+        var todayDT = moment(data.daily[i].dt, "X").format("MMM/DD/YYYY");
+
+        $(dayDate).addClass("col");
+        dayDate.textContent = todayDT;
+        dayBox.append(dayDate);
+        $(dayTemp).addClass("col");
+        dayTemp.textContent = "Temp: " + data.daily[i].temp.max + "/" + data.daily[i].temp.min + "F";
+        dayBox.append(dayTemp);
+        $(dayWind).addClass("col");
+        dayWind.textContent = "Wind: " + data.daily[i].wind_speed + "MPH";
+        dayBox.append(dayWind);
+        $(dayHum).addClass("col");
+        dayHum.textContent = "Humidity: " + data.daily[i].humidity + "%";
+        dayBox.append(dayHum);
+        forecastEl.append(dayBox);
     }
+}
+
+//stores searches
+function pushToStore(city) {
+    var localCheck = JSON.parse(localStorage.getItem("search-history"));
+    console.log("localcheck1: ", localCheck);
+    var counter = 0;
+
+    if (localCheck === null) {
+        console.log("localcheck null");
+        localCheck = [];
+        localCheck.push(city);
+        
+    } else {
+        console.log("localcheck !null");
+        for (i = 0; i < localCheck.length; i++) {
+            if (localCheck[i] === city) {
+            counter++;
+            console.log("counter: ", counter);
+            }
+        }
+        console.log("counter final: ", counter);
+        
+        if(counter === 0 && localCheck.length > 0) {
+        console.log("city not present");
+        localCheck.push(city);
+        }
+    }
+    
+    localStorage.setItem("search-history", JSON.stringify(localCheck));
 }
 
 //store/display historical searches
 function displayHistory() {
+    var localCheck = JSON.parse(localStorage.getItem("search-history"));
 
+    if (localCheck.length > 0) {
+        for (i = 0; i < localCheck.length; i++) {
+        var newBtn = document.createElement('btn');
+
+        newBtn.textContent = localCheck[i];
+        $(newBtn).addClass('btn');
+        cityBtns.append(newBtn);
+        }
+    }
 }
 
 //initialize page (pulls historical searches)
