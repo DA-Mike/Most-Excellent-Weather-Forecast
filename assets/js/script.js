@@ -60,7 +60,7 @@ function buttonClickHandler(event) {
 
 //get lat long
 var getLatLong = function (city, state) {
-    var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + ',' + state + ',US&limit=1&appid=' + apiKey;
+    var apiUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + city + ',' + state + ',US&limit=1&appid=' + apiKey;
 
     fetch(apiUrl)
     .then(function (response) {
@@ -104,7 +104,7 @@ var getWeatherData = function(lat, lon) {
 //populate summary data
 function displaySummary(data) {
     var weatherIcon = document.createElement("img");
-    $(weatherIcon).attr("src", "http://openweathermap.org/img/wn/" + data.current.weather[0].icon + ".png");
+    $(weatherIcon).attr("src", "https://openweathermap.org/img/wn/" + data.current.weather[0].icon + ".png");
 
     sumDate.textContent = moment(data.current.dt, "X").format("MMM/DD/YYYY");
     cityTitle.textContent = cityGlob + " " + "(" + sumDate.textContent + ")"; //+ " " + data.current.weather[0].icon;
@@ -121,6 +121,7 @@ function displaySummary(data) {
         $(cityUvi).css('background-color', 'green');
     } else if (data.current.uvi > 2 && data.current.uvi < 6) {
         $(cityUvi).css('background-color', 'yellow');
+        $(cityUvi).css('color', 'black');
     } else if (data.current.uvi > 5 && data.current.uvi < 8) {
         $(cityUvi).css('background-color', 'orange');
     } else {
@@ -139,7 +140,7 @@ function displayForecast(data) {
         var dayWind = document.createElement("div");
         var dayHum = document.createElement("div");
         var weatherIcon = document.createElement("img");
-        $(weatherIcon).attr("src", "http://openweathermap.org/img/wn/" + data.daily[i].weather[0].icon + ".png");
+        $(weatherIcon).attr("src", "https://openweathermap.org/img/wn/" + data.daily[i].weather[0].icon + ".png");
         $(weatherIcon).css({
             width: "50px",
             height: "50px",
