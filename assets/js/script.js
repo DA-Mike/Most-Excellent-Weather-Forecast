@@ -12,8 +12,6 @@ var forecastEl = document.querySelector(".forecast-container");
 var cityBtns = document.querySelector("#city-buttons");
 var apiKey = 'b011db637bad336f73754395f19fc139';
 var cityGlob = '';
-var cityObj = {name: '', lat: '', lon: ''};
-var priorSearches = [];
 var pageCounter = 0;
 
 //formSubmitHandler
