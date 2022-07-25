@@ -14,7 +14,7 @@ var apiKey = 'b011db637bad336f73754395f19fc139';
 var cityGlob = '';
 var pageCounter = 0;
 
-//formSubmitHandler
+//formSubmitHandler searches for the city designated by user
 var formSubmitHandler = function (event) {
     event.preventDefault();
     cityGlob = cityInputEl.value;
@@ -56,7 +56,7 @@ function buttonClickHandler(event) {
     }
 }
 
-//get lat long
+//get latitude and longitude of city
 var getLatLong = function (city, state) {
     var apiUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + city + ',' + state + ',US&limit=1&appid=' + apiKey;
     pageCounter++;
@@ -93,7 +93,7 @@ var getLatLong = function (city, state) {
     
 
 
-//getWeatherData
+//gets current weather and forecast
 var getWeatherData = function(lat, lon) {
     var apiURL = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + lon + '&units=imperial&exclude=minutely,hourly,warnings&appid=' + apiKey;
 
@@ -121,13 +121,12 @@ var getWeatherData = function(lat, lon) {
 };
 
 
-//populate summary data
+//populates summary data for current day
 function displaySummary(data) {
     var weatherIcon = document.createElement("img");
     $(weatherIcon).attr("src", "https://openweathermap.org/img/wn/" + data.current.weather[0].icon + ".png");
 
     sumDate.textContent = moment(data.current.dt, "X").format("MMM/DD/YYYY");
-    // cityGlob = cityGlob.charAt(0).toUpperCase() +  cityGlob.slice(1);
     cityTitle.textContent = cityGlob + " " + "(" + sumDate.textContent + ")";
     cityTitle.append(weatherIcon);
     cityTemp.textContent = "Temp: " + Math.floor(data.current.temp) + " °F";
@@ -150,7 +149,7 @@ function displaySummary(data) {
     }
 }
 
-//populate forecast data
+//populates forecast data
 function displayForecast(data) {    
     $(forecastEl).children().remove();
 
