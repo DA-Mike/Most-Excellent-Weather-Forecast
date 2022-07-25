@@ -63,6 +63,7 @@ var getLatLong = function (city, state) {
     var apiUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + city + ',' + state + ',US&limit=1&appid=' + apiKey;
     pageCounter++;
 
+    // formats cityGlob for the lazy user
     cityGlob = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase() + ", " + state.toUpperCase();
 
     fetch(apiUrl)
