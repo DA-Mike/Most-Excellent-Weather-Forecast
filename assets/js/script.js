@@ -63,6 +63,8 @@ var getLatLong = function (city, state) {
     var apiUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + city + ',' + state + ',US&limit=1&appid=' + apiKey;
     pageCounter++;
 
+    cityGlob = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase() + ", " + state.toUpperCase();
+
     fetch(apiUrl)
     .then(function (response) {
     if (response.ok) {
@@ -126,6 +128,7 @@ function displaySummary(data) {
     $(weatherIcon).attr("src", "https://openweathermap.org/img/wn/" + data.current.weather[0].icon + ".png");
 
     sumDate.textContent = moment(data.current.dt, "X").format("MMM/DD/YYYY");
+    // cityGlob = cityGlob.charAt(0).toUpperCase() +  cityGlob.slice(1);
     cityTitle.textContent = cityGlob + " " + "(" + sumDate.textContent + ")";
     cityTitle.append(weatherIcon);
     cityTemp.textContent = "Temp: " + Math.floor(data.current.temp) + " °F";
