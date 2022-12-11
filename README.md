@@ -1,7 +1,5 @@
 # Most Excellent Weather Forecast
 
-## UCB Bootcamp Module 6
-
 The Most Excellent Weather Forecast is a dashboard which will allow the user to search for weather conditions for most, if not all, cities located in the US. The dashboard provides current conditions and a five day forecast. The dashboard saves up to 10 prior searches to allow the user to easily go back and review conditions at a prior city.
 
 Please note that it appears the UV Index data coming in from the API provider doesn't appear accurate, although the color scheme will change based on the UV Index value.
